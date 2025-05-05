@@ -1,11 +1,11 @@
 import asyncio
+import os
 import functools
 import websockets
-import os
 
 clients = {}
 
-# 🧩 This is the handler for each client
+# 🧩 Handler for incoming client connections
 async def handler(ws, path):
     client_id = "unknown"
     try:
@@ -25,7 +25,7 @@ async def handler(ws, path):
             del clients[client_id]
             print(f"[DISCONNECTED] {client_id}")
 
-# 🚀 Properly register the handler with both ws + path
+# 🚀 Start WebSocket server on Railway-provided port
 async def main():
     port = int(os.environ.get("PORT", 5000))
     print(f"[PixelRoot RELAY] Starting on port {port}...")
