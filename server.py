@@ -1,6 +1,7 @@
 import asyncio
 import functools
 import websockets
+import os
 
 clients = {}
 
@@ -26,11 +27,12 @@ async def handler(ws, path):
 
 # 🚀 Properly register the handler with both ws + path
 async def main():
-    print("[PixelRoot RELAY] Starting on port 5000...")
+    port = int(os.environ.get("PORT", 5000))
+    print(f"[PixelRoot RELAY] Starting on port {port}...")
     async with websockets.serve(
         functools.partial(handler),
         "0.0.0.0",
-        5000
+        port
     ):
         await asyncio.Future()  # run forever
 
