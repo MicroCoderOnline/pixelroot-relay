@@ -20,8 +20,10 @@ async def handler(ws, path):
         if client_id in clients:
             del clients[client_id]
 
-if __name__ == "__main__":
+async def main():
     print("[STARTING] Pixel Root Relay Server on port 5000...")
-    start_server = websockets.serve(handler, "0.0.0.0", 5000)
-    asyncio.get_event_loop().run_until_complete(start_server)
-    asyncio.get_event_loop().run_forever()
+    async with websockets.serve(handler, "0.0.0.0", 5000):
+        await asyncio.Future()  # run forever
+
+if __name__ == "__main__":
+    asyncio.run(main())
