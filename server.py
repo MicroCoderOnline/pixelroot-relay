@@ -5,7 +5,6 @@ clients = {}
 
 async def handler(ws, path):
     try:
-        # First message must be the client's unique ID
         client_id = await ws.recv()
         print(f"[CONNECTED] {client_id}")
         clients[client_id] = ws
@@ -14,12 +13,9 @@ async def handler(ws, path):
             if "::" in message:
                 target_id, payload = message.split("::", 1)
                 if target_id in clients:
-                    try:
-                        await clients[target_id].send(payload)
-                    except:
-                        print(f"[ERROR] Failed to send to {target_id}")
-    except Exception as e:
-        print(f"[DISCONNECTED] {client_id} - {e}")
+                    await clients[target_id].send(payload)
+    except:
+        print(f"[DISCONNECTED] {client_id}")
     finally:
         if client_id in clients:
             del clients[client_id]
