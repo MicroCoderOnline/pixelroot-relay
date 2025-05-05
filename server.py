@@ -1,9 +1,10 @@
 import asyncio
+import functools
 import websockets
 
 clients = {}
 
-# 🧩 This is the handler function where connections come in
+# 🧩 This is the handler for each client
 async def handler(ws, path):
     client_id = "unknown"
     try:
@@ -23,11 +24,15 @@ async def handler(ws, path):
             del clients[client_id]
             print(f"[DISCONNECTED] {client_id}")
 
-# 🚀 Start the WebSocket server on port 5000
+# 🚀 Properly register the handler with both ws + path
 async def main():
     print("[PixelRoot RELAY] Starting on port 5000...")
-    async with websockets.serve(handler, "0.0.0.0", 5000):
-        await asyncio.Future()  # Run forever
+    async with websockets.serve(
+        functools.partial(handler),
+        "0.0.0.0",
+        5000
+    ):
+        await asyncio.Future()  # run forever
 
 if __name__ == "__main__":
     asyncio.run(main())
