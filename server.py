@@ -14,14 +14,15 @@ async def handler(ws, path):
                 target_id, payload = message.split("::", 1)
                 if target_id in clients:
                     await clients[target_id].send(payload)
-    except:
-        print(f"[DISCONNECTED] {client_id}")
+    except Exception as e:
+        print(f"[ERROR] {e}")
     finally:
         if client_id in clients:
             del clients[client_id]
+            print(f"[DISCONNECTED] {client_id}")
 
 async def main():
-    print("[STARTING] Pixel Root Relay Server on port 5000...")
+    print("[PixelRoot RELAY] Starting on port 5000...")
     async with websockets.serve(handler, "0.0.0.0", 5000):
         await asyncio.Future()  # run forever
 
